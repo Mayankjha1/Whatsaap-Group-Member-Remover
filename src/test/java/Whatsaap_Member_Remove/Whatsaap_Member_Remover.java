@@ -129,7 +129,7 @@ public class Whatsaap_Member_Remover {
 
                 // Show thank you popup with statistics
                 JOptionPane.showMessageDialog(null,
-                        "Thank you for using the WhatsApp Group Member Remover Tool!\n" +
+                        "Thank you for using the WhatsApp Group Member Remover Tool! Coded by Mayank Jha\n" +
                                 "Total members: " + totalMembers + "\n" +
                                 "Removed members: " + removedMembersCount,
                         "Whatsaap Member Remover",
