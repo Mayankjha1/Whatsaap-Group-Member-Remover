@@ -65,10 +65,6 @@ Click here to view the full code
 	•	This tool is for educational purposes only.
 	•	Please use it responsibly and with the group admin’s consent.
 
-📜 License
-
-This project is licensed under the MIT License.
-
 👤 Author
 
 Mayank Jha
