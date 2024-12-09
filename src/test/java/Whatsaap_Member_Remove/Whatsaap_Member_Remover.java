@@ -30,8 +30,8 @@ public class Whatsaap_Member_Remover {
 
         String name = JOptionPane.showInputDialog(
                 null,                                // No parent component
-                "Enter the Contact name:",          // Message
-                "Telegram Media Downloader",        // Title
+                "Enter the Group name:",          // Message
+                "Whatsaap Member Remover",        // Title
                 JOptionPane.INFORMATION_MESSAGE     // Message type
         );
 
@@ -132,7 +132,7 @@ public class Whatsaap_Member_Remover {
                         "Thank you for using the WhatsApp Group Member Remover Tool!\n" +
                                 "Total members: " + totalMembers + "\n" +
                                 "Removed members: " + removedMembersCount,
-                        "Operation Complete",
+                        "Whatsaap Member Remover",
                         JOptionPane.INFORMATION_MESSAGE);
             } else {
                 System.out.println("Only Group Admin is there or No members found.");
