@@ -8,14 +8,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.Test;
 
+import javax.swing.*;
 import java.time.Duration;
 import java.util.List;
 
 public class Whatsaap_Member_Remover {
     @Test
     public void Whatsapp_Member_Remover() throws InterruptedException {
-
-        String Name = "Testing";
 
         // Disable Notifications
         ChromeOptions options = new ChromeOptions();
@@ -29,40 +28,48 @@ public class Whatsaap_Member_Remover {
         driver.get("https://web.whatsapp.com/");
         driver.manage().window().maximize();
 
-        System.out.println("Thank you for using this Whatsaap Group Member Remover Tool! Coded by Mayank Jha. \n");
+        String name = JOptionPane.showInputDialog(
+                null,                                // No parent component
+                "Enter the Contact name:",          // Message
+                "Telegram Media Downloader",        // Title
+                JOptionPane.INFORMATION_MESSAGE     // Message type
+        );
+
+        if (name == null || name.trim().isEmpty()) {
+            System.out.println("No name entered. Exiting.");
+            driver.quit(); // Quit the driver
+            System.exit(0);  // Exit if no name is provided
+        }
+
+        // Validate the input and trim unnecessary spaces
+        name = name.trim();
+        System.out.println("Entered name: " + name);
+        System.out.println("Thank you for using this WhatsApp Group Member Remover Tool! Coded by Mayank Jha. \n");
 
         // Click on Search
         Thread.sleep(2000);
         WebElement Search_Clicked = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class=\"_aoq2 _ai01\"]//*[@class=\"_ah_-\"]")));
-        actions.moveToElement(Search_Clicked).click().sendKeys(Name).perform();
+        actions.moveToElement(Search_Clicked).click().sendKeys(name).perform();
 
-        //Click on Searched Item
+        // Click on Searched Item
         Thread.sleep(2000);
         WebElement Searched_Clicked = wait7.until(ExpectedConditions.elementToBeClickable(By.xpath("(//div[@class=\"x1n2onr6\"]//div[@class=\"_ak8l\"])[1]")));
         actions.moveToElement(Searched_Clicked).click().perform();
 
-        //Click on Header and check if More option is there to show all contacts
-
+        // Click on Header and check if More option is there to show all contacts
         Thread.sleep(2000);
         WebElement Header_Clicked = wait7.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@class=\"_amie\"]")));
         actions.moveToElement(Header_Clicked).click().perform();
 
-        // Wait for 2 second and scroll
+        // Wait for 2 second and scroll to the bottom
         try {
             Thread.sleep(2000);
-
-            // Scroll to the bottom of the page
             JavascriptExecutor js = (JavascriptExecutor) driver;
             boolean isAtBottom = false;
 
             while (!isAtBottom) {
-                // Scroll down
                 js.executeScript("window.scrollBy(0, document.body.scrollHeight);");
-
-                // Wait for some time to allow new content to load (if any)
                 Thread.sleep(1000);
-
-                // Check if we are at the bottom of the page
                 Long scrollHeight = (Long) js.executeScript("return document.body.scrollHeight;");
                 Long clientHeight = (Long) js.executeScript("return window.innerHeight;");
                 Long scrollY = (Long) js.executeScript("return window.scrollY;");
@@ -71,8 +78,7 @@ public class Whatsaap_Member_Remover {
 
             System.out.println("Scrolled to the bottom of the page.");
 
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
         }
 
@@ -82,58 +88,60 @@ public class Whatsaap_Member_Remover {
 
             // Check if the element is displayed
             if (element.isDisplayed()) {
-                // If visible, click the element
                 element.click();
                 System.out.println("Element clicked successfully.");
             } else {
-                // If not visible, print a message
                 System.out.println("Element is not visible.");
             }
-        } catch (
-                NoSuchElementException e) {
-            // Handle the case where the element is not found
+        } catch (NoSuchElementException e) {
             System.out.println("Element not found.");
         }
 
         // Get Member Name and Click on Remove
-
-        //member Lists
         try {
             List<WebElement> Members_List = wait7.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[@class=\"x1n2onr6 xyw6214 x78zum5 xdt5ytf x1iyjqo2 x1odjw0f x150wa6m\"]//div[@class=\"x10l6tqk xh8yej3 x1g42fcv\"]//div[@class=\"_ak8q\"]")));
 
-            // Perform actions with the list
+            int removedMembersCount = 0;
+            int totalMembers = Members_List.size();
+
             if (Members_List.size() > 0) {
                 System.out.println("Members found: " + Members_List.size());
                 for (int i = 0; i < Members_List.size(); i++) {
                     System.out.println("Member: " + (i + 1) + ". " + Members_List.get(i).getText());
                     String Member_Name = Members_List.get(i).getText();
 
-                    if(i >= 1) {
+                    // Skip Admin and remove members
+                    if (i >= 1) {
                         actions.moveToElement(Members_List.get(i)).contextClick().perform();
 
-                        // Click on Remove
                         WebElement Remove_Member = wait7.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[@aria-label=\"Remove\"]")));
                         actions.moveToElement(Remove_Member).click().perform();
 
-                        // Click on the Remove Button Last
                         WebElement Remove_Member_Last = wait7.until(ExpectedConditions.elementToBeClickable(By.xpath("//*[text()=\"Remove\"]")));
                         actions.moveToElement(Remove_Member_Last).click().perform();
                         System.out.println(Member_Name + " Removed \n");
+
+                        removedMembersCount++;
                     }
 
                     Thread.sleep(3000);
-
-
-
                 }
+
+                // Show thank you popup with statistics
+                JOptionPane.showMessageDialog(null,
+                        "Thank you for using the WhatsApp Group Member Remover Tool!\n" +
+                                "Total members: " + totalMembers + "\n" +
+                                "Removed members: " + removedMembersCount,
+                        "Operation Complete",
+                        JOptionPane.INFORMATION_MESSAGE);
             } else {
                 System.out.println("Only Group Admin is there or No members found.");
             }
 
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
+        } finally {
+            //driver.quit();
         }
-
-
     }
 }
